@@ -10,10 +10,33 @@ class Game {
   }
 
   start() {
-    this.player = new Player(this, 100, this.canvas.height / 2);
+    const ground = this.canvas.height - 130; // the octopus is on the ground
+    this.enableControls();
+    this.player = new Player(this, 100, ground);
     this.items = [];
     this.addItem();
     this.loop();
+  }
+
+  enableControls() {
+    window.addEventListener('keydown', (event) => {
+      // to enable the control of the octopus via the keyboard
+      const key = event.key;
+      switch (key) {
+        case 'ArrowUp':
+          this.player.y -= 10;
+          break;
+        case 'ArrowDown':
+          this.player.y += 10;
+          break;
+        case 'ArrowLeft':
+          this.player.x -= 10;
+          break;
+        case 'ArrowRight':
+          this.player.x += 10;
+          break;
+      }
+    });
   }
 
   addItem() {
@@ -44,7 +67,7 @@ class Game {
   }
 
   collectGarbage() {
-    const ground = this.canvas.height - 150; // const ground so the items are destroyed as soon as they touch the ground
+    const ground = this.canvas.height - 130; // const ground so the items are destroyed as soon as they touch the ground
     this.items.forEach((item, index) => {
       if (item.x < 0 || item.y > ground) {
         this.items.splice(index, 1); //mutates the array. 1 -> the number of elements

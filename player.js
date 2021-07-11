@@ -1,13 +1,13 @@
 const octopus = new Image();
-octopus.src = './images/octoplayer.png';
+octopus.src = './images/octoplayer-alone.png';
 
 class Player {
   constructor(game, x, y) {
     this.game = game;
     this.x = x;
     this.y = y;
-    this.width = 52;
-    this.height = 38;
+    this.width = 100;
+    this.height = 80;
     this.speedX = 0;
     this.speedY = 0;
     this.accelerationX = 0;
