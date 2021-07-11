@@ -1,5 +1,5 @@
 const octopus = new Image();
-octopus.src = '/images/octoplayer.png';
+octopus.src = './images/octoplayer.png';
 
 class Player {
   constructor(game, x, y) {

@@ -16,13 +16,27 @@ class Game {
   }
 
   loop() {
-    setInterval(() => {});
-    this.paint();
+    window.requestAnimationFrame(() => {
+      this.runLogic;
+      this.paint();
+      this.loop();
+    });
+  }
+
+  runLogic() {
+    // execute runLogic method for all elements bound to the game objet: player and items
+    this.player.runLogic();
+  }
+
+  clearScreen() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height); // function to clear the screen
   }
 
   paint() {
-    this.paintBackground();
-    //this.context.fillRect(100, 100, 200, 200);
+    // executes paint method for all elements bound to the game object
+    this.clearScreen(); //first clear the screen
+    this.paintBackground(); //then paint background
+    this.player.paint(); //and player
   }
 
   paintBackground() {
