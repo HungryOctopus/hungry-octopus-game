@@ -11,11 +11,15 @@ class Game {
 
   start() {
     const ground = this.canvas.height - 130; // the octopus is on the ground
+    this.lastItemCreationTimestamp = 0; // to avoid the items to be to near to each other
+    this.itemCreationInterval = 3000; // 3 seconds between the creation of 2 items
     this.score = 100;
     this.enableControls();
     this.player = new Player(this, 100, ground);
     this.items = [];
+    this.trashArray = [];
     this.addItem();
+    this.addTrash();
     this.loop();
   }
 
@@ -36,6 +40,9 @@ class Game {
         case 'ArrowRight':
           this.player.x += 10;
           break;
+        case 'a':
+          this.player.y -= 40;
+          break;
       }
     });
   }
@@ -47,8 +54,15 @@ class Game {
     this.items.push(item);
   }
 
+  addTrash() {
+    const trashX = Math.random() * this.canvas.width; // position of the items is generated randomly
+    const trashY = Math.random() * this.canvas.height;
+    const trash = new Trash(this, trashX, trashY, 40, 40);
+    this.trashArray.push(trash);
+  }
+
   // collision detection
-  checkCollisionBetweenPlayerAndItems() {
+  checkCollisions() {
     const player = this.player;
     this.items.forEach((item, index) => {
       if (item.checkIntersection(this.player)) {
@@ -56,25 +70,42 @@ class Game {
         this.score += 10;
       }
     });
+    this.trashArray.forEach((trash, index) => {
+      if (trash.checkIntersection(this.player)) {
+        this.trashArray.splice(index, 1); // remove the trash
+        this.score -= 20;
+      }
+    });
   }
 
   loop() {
+    this.runLogic();
+    this.paint();
     window.requestAnimationFrame(() => {
-      this.runLogic();
-      this.paint();
       this.loop();
     });
   }
 
   runLogic() {
-    if (Math.random() < 0.02) {
-      this.addItem();
+    const currentTimestamp = Date.now();
+    if (
+      currentTimestamp - this.lastItemCreationTimestamp >
+      this.itemCreationInterval // if the last time we created an item is more than 3 seconds ago
+    ) {
+      this.addItem(); // then create an item
+      this.lastItemCreationTimestamp = currentTimestamp; // and set the last item creation timestamp to the current timestamp
+    }
+    if (Math.random() < 0.01) {
+      this.addTrash();
     }
     // execute runLogic method for all elements bound to the game objet: player and items
     this.player.runLogic();
-    this.checkCollisionBetweenPlayerAndItems(); //collision detection
+    this.checkCollisions(); //collision detection
     this.items.forEach((item) => {
       item.runLogic();
+    });
+    this.trashArray.forEach((trash) => {
+      trash.runLogic();
     }); // run the logic for every item in the array items
 
     this.collectGarbage(); // makes the items disappear that we don't use anymore for performance reasons
@@ -85,6 +116,11 @@ class Game {
     this.items.forEach((item, index) => {
       if (item.x < 0 || item.y > ground) {
         this.items.splice(index, 1); //mutates the array. 1 -> the number of elements
+      }
+    });
+    this.trashArray.forEach((trash, index) => {
+      if (trash.x < 0 || trash.y > ground) {
+        this.trashArray.splice(index, 1); //mutates the array. 1 -> the number of elements
       }
     });
   }
@@ -104,7 +140,10 @@ class Game {
     this.paintBackground(); //then paint the background
     this.player.paint(); // paint the player
     this.items.forEach((item) => {
-      item.paint(); // and paint each items
+      item.paint(); // paint each items
+    });
+    this.trashArray.forEach((trash) => {
+      trash.paint(); // and paint each trash
     });
     this.paintScore();
   }

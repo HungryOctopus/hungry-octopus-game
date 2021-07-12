@@ -1,5 +1,5 @@
 class Item {
-  constructor(game, x, y) {
+  constructor(game, x, y, width, height) {
     this.game = game;
     this.x = x;
     this.y = y;
@@ -32,13 +32,23 @@ class Item {
   }
 }
 
-/* let x = 100;
-let y = 100;
+class Trash extends Item {
+  constructor(game, x, y, width, height) {
+    super(game, x, y, 40, 40);
+  }
 
-setInterval(() => {
-  context.clearRect(0, 0, canvasElement.width, canvasElement.height);
-  y++;
-  context.fillStyle = 'red';
-  context.fillRect(x, y, 20, 20);
-}, 1000 / 60);
- */
+  runLogic() {
+    super.runLogic();
+    //responsible for the logic movements of the items
+    this.x--;
+    this.y++;
+  }
+
+  paint() {
+    super.paint();
+    context.save();
+    context.fillStyle = 'red';
+    this.game.context.fillRect(this.x, this.y, 40, 40);
+    context.restore();
+  }
+}
