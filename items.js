@@ -3,6 +3,21 @@ class Item {
     this.game = game;
     this.x = x;
     this.y = y;
+    this.width = 25;
+    this.height = 25;
+  }
+
+  checkIntersection(player) {
+    return (
+      // if right edge of player is over left edge of item
+      player.x + player.width / 2 >= this.x - this.width / 2 &&
+      // if left edge of player is below right edge of item
+      player.x - player.width / 2 <= this.x + this.width / 2 &&
+      // if bottom edge of player is over top edge of item
+      player.y + player.height / 2 >= this.y - this.height / 2 &&
+      // if top edge of player is below bottom edge of item
+      player.y - player.height / 2 <= this.y + this.height / 2
+    );
   }
 
   runLogic() {

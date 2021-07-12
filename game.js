@@ -11,6 +11,7 @@ class Game {
 
   start() {
     const ground = this.canvas.height - 130; // the octopus is on the ground
+    this.score = 100;
     this.enableControls();
     this.player = new Player(this, 100, ground);
     this.items = [];
@@ -42,8 +43,19 @@ class Game {
   addItem() {
     const itemX = Math.random() * this.canvas.width; // position of the items is generated randomly
     const itemY = Math.random() * this.canvas.height;
-    const anItem = new Item(this, itemX, itemY);
-    this.items.push(anItem);
+    const item = new Item(this, itemX, itemY);
+    this.items.push(item);
+  }
+
+  // collision detection
+  checkCollisionBetweenPlayerAndItems() {
+    const player = this.player;
+    this.items.forEach((item, index) => {
+      if (item.checkIntersection(this.player)) {
+        this.items.splice(index, 1); // remove the item
+        this.score += 10;
+      }
+    });
   }
 
   loop() {
@@ -60,9 +72,11 @@ class Game {
     }
     // execute runLogic method for all elements bound to the game objet: player and items
     this.player.runLogic();
+    this.checkCollisionBetweenPlayerAndItems(); //collision detection
     this.items.forEach((item) => {
       item.runLogic();
     }); // run the logic for every item in the array items
+
     this.collectGarbage(); // makes the items disappear that we don't use anymore for performance reasons
   }
 
@@ -79,14 +93,20 @@ class Game {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height); // function to clear the screen
   }
 
+  paintScore() {
+    this.context.font = '24px sans-serif';
+    this.context.fillText(`Score: ${this.score}`, 450, 50);
+  }
+
   paint() {
     // executes paint method for all elements bound to the game object
     this.clearScreen(); //first clear the screen
     this.paintBackground(); //then paint the background
     this.player.paint(); // paint the player
     this.items.forEach((item) => {
-      item.paint();
-    }); // and paint each items
+      item.paint(); // and paint each items
+    });
+    this.paintScore();
   }
 
   paintBackground() {
