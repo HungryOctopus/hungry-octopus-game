@@ -1,10 +1,16 @@
+const jellyfish = new Image();
+jellyfish.src = './images/jellyfish.png';
+
+const plasticbottle = new Image();
+plasticbottle.src = './images/plasticbottle.png';
+
 class Item {
   constructor(game, x, y, width, height) {
     this.game = game;
     this.x = x;
     this.y = y;
-    this.width = 25;
-    this.height = 25;
+    this.width = 20;
+    this.height = 20;
   }
 
   checkIntersection(player) {
@@ -28,13 +34,25 @@ class Item {
 
   paint() {
     //responsible for painting the items on the screen
-    this.game.context.fillRect(this.x, this.y, 25, 25); // items are squares for now, later to be replaced with images
+    const context = this.game.context;
+    context.save();
+
+    // this.game.context.fillRect(this.x, this.y, 25, 25); // items are squares for now, later to be replaced with images
+
+    context.drawImage(
+      jellyfish,
+      this.x - this.width / 2,
+      this.y - this.height / 2,
+      this.width,
+      this.height
+    );
+    context.restore();
   }
 }
 
 class Trash extends Item {
   constructor(game, x, y, width, height) {
-    super(game, x, y, 40, 40);
+    super(game, x, y, 25, 45); // do these values for width and height change anything?
   }
 
   runLogic() {
@@ -47,8 +65,16 @@ class Trash extends Item {
   paint() {
     super.paint();
     context.save();
-    context.fillStyle = 'red';
-    this.game.context.fillRect(this.x, this.y, 40, 40);
+    context.drawImage(
+      plasticbottle,
+      this.x - this.width / 2,
+      this.y - this.height / 2,
+      20, // these values should be changed
+      35
+    );
+
+    //context.fillStyle = 'red';
+    //this.game.context.fillRect(this.x, this.y, 40, 40);
     context.restore();
   }
 }

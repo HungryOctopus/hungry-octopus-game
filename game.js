@@ -5,12 +5,15 @@ class Game {
   constructor(canvas) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
+    this.running = false; // to set the game over function
+    this.enableControls();
     //this.screens = screens;
     //this.loop();
   }
 
   start() {
     const ground = this.canvas.height - 130; // the octopus is on the ground
+    this.running = true; // game doesn't run before the start
     this.lastItemCreationTimestamp = 0; // to avoid the items to be to near to each other
     this.itemCreationInterval = 3000; // 3 seconds between the creation of 2 items
     this.score = 100;
@@ -81,9 +84,12 @@ class Game {
   loop() {
     this.runLogic();
     this.paint();
-    window.requestAnimationFrame(() => {
-      this.loop();
-    });
+    if (this.running) {
+      // condition to the loop: if game over, it stops
+      window.requestAnimationFrame(() => {
+        this.loop();
+      });
+    }
   }
 
   runLogic() {
@@ -109,6 +115,11 @@ class Game {
     }); // run the logic for every item in the array items
 
     this.collectGarbage(); // makes the items disappear that we don't use anymore for performance reasons
+    if (this.score < 0) {
+      // if the score is below 0, the game freezes
+      this.running = false;
+      this.lost = true;
+    }
   }
 
   collectGarbage() {
@@ -134,18 +145,28 @@ class Game {
     this.context.fillText(`Score: ${this.score}`, 450, 50);
   }
 
+  paintGameOver() {
+    this.context.font = '75px sans-serif';
+    this.context.fillText(`GAME OVER`, 250, 350);
+  }
+
   paint() {
     // executes paint method for all elements bound to the game object
     this.clearScreen(); //first clear the screen
-    this.paintBackground(); //then paint the background
-    this.player.paint(); // paint the player
-    this.items.forEach((item) => {
-      item.paint(); // paint each items
-    });
-    this.trashArray.forEach((trash) => {
-      trash.paint(); // and paint each trash
-    });
-    this.paintScore();
+    if (this.running) {
+      this.paintBackground(); //then paint the background
+      this.player.paint(); // paint the player
+      this.items.forEach((item) => {
+        item.paint(); // paint each items
+      });
+      this.trashArray.forEach((trash) => {
+        trash.paint(); // and paint each trash
+      });
+      this.paintScore();
+    }
+    if (this.lost) {
+      this.paintGameOver();
+    }
   }
 
   paintBackground() {
