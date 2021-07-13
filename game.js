@@ -12,6 +12,9 @@ class Game {
   }
 
   start() {
+    if (this.running) {
+      return;
+    }
     const ground = this.canvas.height - 130; // the octopus is on the ground
     this.running = true; // game doesn't run before the start
     this.lastItemCreationTimestamp = 0; // to avoid the items to be to near to each other
@@ -19,11 +22,12 @@ class Game {
     this.score = 100;
     this.enableControls();
     this.player = new Player(this, 100, ground);
-    this.items = [];
+    this.foodArray = [];
     this.trashArray = [];
-    this.addItem();
+    this.addFood();
     this.addTrash();
     this.loop();
+    this.current = (3 * Math.PI) / 4; // 135deg
   }
 
   enableControls() {
@@ -50,11 +54,11 @@ class Game {
     });
   }
 
-  addItem() {
-    const itemX = Math.random() * this.canvas.width; // position of the items is generated randomly
-    const itemY = Math.random() * this.canvas.height;
-    const item = new Item(this, itemX, itemY);
-    this.items.push(item);
+  addFood() {
+    const foodX = Math.random() * this.canvas.width; // position of the items is generated randomly
+    const foodY = Math.random() * this.canvas.height;
+    const food = new Food(this, foodX, foodY);
+    this.foodArray.push(food);
   }
 
   addTrash() {
@@ -67,9 +71,9 @@ class Game {
   // collision detection
   checkCollisions() {
     const player = this.player;
-    this.items.forEach((item, index) => {
+    this.foodArray.forEach((item, index) => {
       if (item.checkIntersection(this.player)) {
-        this.items.splice(index, 1); // remove the item
+        this.foodArray.splice(index, 1); // remove the item
         this.score += 10;
       }
     });
@@ -98,7 +102,7 @@ class Game {
       currentTimestamp - this.lastItemCreationTimestamp >
       this.itemCreationInterval // if the last time we created an item is more than 3 seconds ago
     ) {
-      this.addItem(); // then create an item
+      this.addFood(); // then create an item
       this.lastItemCreationTimestamp = currentTimestamp; // and set the last item creation timestamp to the current timestamp
     }
     if (Math.random() < 0.01) {
@@ -107,7 +111,7 @@ class Game {
     // execute runLogic method for all elements bound to the game objet: player and items
     this.player.runLogic();
     this.checkCollisions(); //collision detection
-    this.items.forEach((item) => {
+    this.foodArray.forEach((item) => {
       item.runLogic();
     });
     this.trashArray.forEach((trash) => {
@@ -124,9 +128,9 @@ class Game {
 
   collectGarbage() {
     const ground = this.canvas.height - 130; // const ground so the items are destroyed as soon as they touch the ground
-    this.items.forEach((item, index) => {
+    this.foodArray.forEach((item, index) => {
       if (item.x < 0 || item.y > ground) {
-        this.items.splice(index, 1); //mutates the array. 1 -> the number of elements
+        this.foodArray.splice(index, 1); //mutates the array. 1 -> the number of elements
       }
     });
     this.trashArray.forEach((trash, index) => {
@@ -156,7 +160,7 @@ class Game {
     if (this.running) {
       this.paintBackground(); //then paint the background
       this.player.paint(); // paint the player
-      this.items.forEach((item) => {
+      this.foodArray.forEach((item) => {
         item.paint(); // paint each items
       });
       this.trashArray.forEach((trash) => {

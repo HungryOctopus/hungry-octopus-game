@@ -5,12 +5,15 @@ const plasticbottle = new Image();
 plasticbottle.src = './images/plasticbottle.png';
 
 class Item {
-  constructor(game, x, y, width, height) {
+  constructor(game, x, y, width, height, speedX, speedY, image) {
     this.game = game;
     this.x = x;
     this.y = y;
-    this.width = 20;
-    this.height = 20;
+    this.width = width;
+    this.height = height;
+    this.speedX = speedX;
+    this.speedY = speedY;
+    this.image = image;
   }
 
   checkIntersection(player) {
@@ -28,8 +31,10 @@ class Item {
 
   runLogic() {
     //responsible for the logic movements of the items
-    this.x--;
-    this.y++;
+    // Math.cos, Math.sin, Math.tan
+    // const speedX = this.game.current;
+    this.x += this.speedX;
+    this.y += this.speedY;
   }
 
   paint() {
@@ -40,7 +45,7 @@ class Item {
     // this.game.context.fillRect(this.x, this.y, 25, 25); // items are squares for now, later to be replaced with images
 
     context.drawImage(
-      jellyfish,
+      this.image,
       this.x - this.width / 2,
       this.y - this.height / 2,
       this.width,
@@ -50,31 +55,21 @@ class Item {
   }
 }
 
-class Trash extends Item {
-  constructor(game, x, y, width, height) {
-    super(game, x, y, 25, 45); // do these values for width and height change anything?
+class Food extends Item {
+  constructor(game, x, y) {
+    super(game, x, y, 20, 20, -1, 1, jellyfish);
   }
 
   runLogic() {
     super.runLogic();
-    //responsible for the logic movements of the items
-    this.x--;
-    this.y++;
+    if (Math.random() < (this.speedY > 0 ? 0.05 : 0.05)) {
+      this.speedY *= -1;
+    }
   }
+}
 
-  paint() {
-    super.paint();
-    context.save();
-    context.drawImage(
-      plasticbottle,
-      this.x - this.width / 2,
-      this.y - this.height / 2,
-      20, // these values should be changed
-      35
-    );
-
-    //context.fillStyle = 'red';
-    //this.game.context.fillRect(this.x, this.y, 40, 40);
-    context.restore();
+class Trash extends Item {
+  constructor(game, x, y) {
+    super(game, x, y, 20, 45, -1, 1, plasticbottle); 
   }
 }
