@@ -48,19 +48,32 @@ class Game {
       const key = event.key;
       switch (key) {
         case 'ArrowUp':
-          this.player.y -= 10;
+          this.player.accelerationY = -0.1;
           break;
         case 'ArrowDown':
-          this.player.y += 10;
+          this.player.accelerationY = +0.1;
           break;
         case 'ArrowLeft':
-          this.player.x -= 10;
+          this.player.accelerationX = -0.1;
           break;
         case 'ArrowRight':
-          this.player.x += 10;
+          this.player.accelerationX = +0.1;
           break;
-        case 'a':
-          this.player.y -= 40;
+        case ' ':
+          this.player.speedY -= 5;
+          break;
+      }
+    });
+    window.addEventListener('keyup', (event) => {
+      const key = event.key;
+      switch (key) {
+        case 'ArrowUp':
+        case 'ArrowDown':
+          this.player.accelerationY = 0;
+          break;
+        case 'ArrowLeft':
+        case 'ArrowRight':
+          this.player.accelerationX = 0;
           break;
       }
     });
@@ -131,15 +144,19 @@ class Game {
     }); // run the logic for every item in the array items
 
     this.collectGarbage(); // makes the items disappear that we don't use anymore for performance reasons
-    if (this.score < 0) {
-      // if the score is below 0, the game freezes
-      this.running = false;
-      this.lost = true;
-      this.displayScreen('gameOver');
+    if (this.score <= 0) {
+      this.lose();
     }
   }
 
+  lose() {
+    // what happens when the score gets below 0
+    this.running = false;
+    this.displayScreen('gameOver');
+  }
+
   collectGarbage() {
+    // for the items that are not visible anymore on screen
     const ground = this.canvas.height - 130; // const ground so the items are destroyed as soon as they touch the ground
     this.foodArray.forEach((item, index) => {
       if (item.x < 0 || item.y > ground) {
@@ -162,11 +179,6 @@ class Game {
     this.context.fillText(`Score: ${this.score}`, 450, 50);
   }
 
-  paintGameOver() {
-    this.context.font = '75px sans-serif';
-    this.context.fillText(`GAME OVER`, 250, 350);
-  }
-
   paint() {
     // executes paint method for all elements bound to the game object
     this.clearScreen(); //first clear the screen
@@ -182,11 +194,6 @@ class Game {
       this.paintScore();
     }
   }
-  /*     if (this.lost) {
-      this.paintGameOver();
-    }
-  } */
-  // we don't need it since we have the different screens
 
   paintBackground() {
     this.context.drawImage(oceanBackground, 0, 0, 1000, 500);
