@@ -11,16 +11,38 @@
       <h1>Hungry Octopus</h1>
       <button>Start Game</button>
     </div>
-    <div class="screen" id="screen-playing" style="">
-      <canvas width="1000" height="500"></canvas>
+    <div class="screen" id="screen-playing" style="display: none">
+      <div id="canvas-div">
+        <canvas width="1000" height="500"></canvas>
+      </div>
+      <!-- displays the informations about the player, the current etc.-->
+      <div id="board">
+        <h2>Game info</h2>
+        <ul>
+          <li>Score:</li>
+          <li>Points for food:</li>
+          <ul>
+            <li>Jellyfish</li>
+            <li>Crab</li>
+          </ul>
+          <li>Minus points for garbage:</li>
+          <ul>
+            <li>Plastic bottle:</li>
+            <li>FFP2 Mask:</li>
+            <li>Atomic waiste:</li>
+          </ul>
+          <li>Current:</li>
+        </ul>
+      </div>
     </div>
+
     <div class="screen" id="screen-game-over" style="display: none">
       <h3>You lost the game :(</h3>
       <button>Try Again</button>
     </div>
 
     <!-- import the splitted js logic. From the less important to the most important. -->
-    <script src="items.js"></script> 
+    <script src="items.js"></script>
     <script src="player.js"></script>
     <script src="game.js"></script>
     <script src="script.js"></script>

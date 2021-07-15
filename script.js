@@ -22,6 +22,7 @@ const tryAgainButton = screenGameOverElement.querySelector('button');
 startButton.addEventListener('click', () => {
   game.start();
 });
+// the game starts when the button is clicked
 
 tryAgainButton.addEventListener('click', () => {
   game.start();

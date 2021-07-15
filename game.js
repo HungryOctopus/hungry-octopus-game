@@ -2,13 +2,23 @@ const oceanBackground = new Image();
 oceanBackground.src = './images/ocean-background.png';
 
 class Game {
-  constructor(canvas) {
+  constructor(canvas, screens) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
     this.running = false; // to set the game over function
     this.enableControls();
-    //this.screens = screens;
+    this.screens = screens;
     //this.loop();
+  }
+
+  displayScreen(name) {
+    const screenThatShouldBeDisplayed = this.screens[name];
+    const screensThatShouldBeHidden = Object.values(this.screens).filter(
+      (screen) => screen !== screenThatShouldBeDisplayed
+    );
+    screenThatShouldBeDisplayed.style.display = '';
+    for (const screen of screensThatShouldBeHidden)
+      screen.style.display = 'none';
   }
 
   start() {
@@ -27,7 +37,9 @@ class Game {
     this.addFood();
     this.addTrash();
     this.loop();
-    this.current = (3 * Math.PI) / 4; // 135deg
+    this.displayScreen('playing');
+
+    //    this.current = (3 * Math.PI) / 4; // 135deg
   }
 
   enableControls() {
@@ -123,6 +135,7 @@ class Game {
       // if the score is below 0, the game freezes
       this.running = false;
       this.lost = true;
+      this.displayScreen('gameOver');
     }
   }
 
@@ -168,10 +181,12 @@ class Game {
       });
       this.paintScore();
     }
-    if (this.lost) {
+  }
+  /*     if (this.lost) {
       this.paintGameOver();
     }
-  }
+  } */
+  // we don't need it since we have the different screens
 
   paintBackground() {
     this.context.drawImage(oceanBackground, 0, 0, 1000, 500);
