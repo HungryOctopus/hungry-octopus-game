@@ -1,5 +1,5 @@
 const octopus = new Image();
-octopus.src = './images/octo-swim.png';
+octopus.src = './images/full_octo_swim.png';
 
 class Player {
   constructor(game, x, y) {
@@ -19,7 +19,7 @@ class Player {
     this.speedX += this.accelerationX;
     this.speedY += this.accelerationY;
 
-    const resistance = 0.05;
+    const resistance = 0.02;
     /*
     if (this.speedX > 0) {
       this.speedX -= resistance;
@@ -42,10 +42,15 @@ class Player {
   paint() {
     const context = this.game.context;
     context.save();
+
+    const accelerationX = this.accelerationX;
+    const accelereationY = this.accelerationY;
+
+   
     context.drawImage(
       octopus,
-      30 + 160 * Math.round(this.frame / 10),
-      0,
+      this.accelerationX || this.accelerationY ? 30 + 160 * Math.round(this.frame / 10) : 30 + 160 * 5,
+      this.accelerationX >= 0 ? 0 : 160,
       155, //width
       160, //height
       this.x - this.width / 5,
