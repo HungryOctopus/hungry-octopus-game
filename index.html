@@ -18,35 +18,44 @@
         <img
           src="./images/octoplayer-alone.png"
           alt="octopus logo"
-          width="80"
+          width="100"
         />
       </span>
       <h1>Hungry Octopus</h1>
-      <p>Feed the octopus with jellyfishes and avoid the trash.</p>
+      <p>Feed the octopus and avoid the trash.</p>
       <button>Start game</button>
     </div>
     <div class="screen" id="screen-playing" style="display: none">
-      <div id="canvas-div">
-        <canvas width="1000" height="500"></canvas>
-      </div>
       <!-- displays the informations about the player, the current etc.-->
       <div id="board">
-        <h2>Game info</h2>
-        <ul>
-          <li>Score:</li>
+        <div id="score">
+          <!-- placed in game.js-->
+        </div>
+        <div id="instructions">
+          <p>
+            Move the octopus with the keyboard and make it jump with the space
+            bar. Collect the food and avoid the garbage
+          </p>
+        </div>
+
+        <div id="info-food">
           <li>Points for food:</li>
           <ul>
-            <li>Jellyfish</li>
-            <li>Crab</li>
+            <li id="pointsJellyfish">Jellyfish</li>
+            <li id="pointsCrab">Crab</li>
           </ul>
+        </div>
+        <div id="info-garbage">
           <li>Minus points for garbage:</li>
           <ul>
             <li>Plastic bottle:</li>
             <li>FFP2 Mask:</li>
             <li>Atomic waiste:</li>
           </ul>
-          <li>Current:</li>
-        </ul>
+        </div>
+      </div>
+      <div id="canvas-div">
+        <canvas width="1000" height="500"></canvas>
       </div>
     </div>
 
@@ -54,6 +63,8 @@
       <h3>You lost the game :(</h3>
       <button>Try Again</button>
     </div>
+
+    <footer></footer>
 
     <!-- import the splitted js logic. From the less important to the most important. -->
     <script src="items.js"></script>

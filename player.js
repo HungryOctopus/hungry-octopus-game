@@ -19,24 +19,39 @@ class Player {
     this.speedX += this.accelerationX;
     this.speedY += this.accelerationY;
 
-    const resistance = 0.02;
-    /*
-    if (this.speedX > 0) {
-      this.speedX -= resistance;
-    } else if (this.speedX < 0) {
-      this.speedX += resistance;
-    }
-    if (this.speedY > 0) {
-      this.speedY -= resistance;
-    } else if (this.speedY < 0) {
-      this.speedY += resistance;
-    }
-    */
+    let resistance = 0.02;
+
     this.speedY /= 1 + resistance;
     this.speedX /= 1 + resistance;
 
     this.x += this.speedX;
     this.y += this.speedY;
+
+    // hard limits: end of the canvas
+
+    //const playerTop = this.y + this.height / 2;
+    //const canvasHeight = this.game.canvas.height; // 500
+    //const playerBottom = this.y - this.height / 2;
+
+    const ground = this.game.canvas.height - 130; // 370
+    if (ground <= this.y) {
+      this.speedY = 0;
+      // this.accelerationY = 0.02;
+    }
+
+    if (this.y >= 460 || this.y <= 30) {
+      this.speedY = 0;
+      this.accelerationY = 0;
+      resistance = -1; // does this do anything?
+    }
+
+    if (this.x >= 950 || this.x <= 30) {
+      this.speedX = 0;
+      this.accelerationX = 0;
+      resistance = -1;
+    }
+
+    // ground
   }
 
   paint() {
@@ -46,11 +61,12 @@ class Player {
     const accelerationX = this.accelerationX;
     const accelereationY = this.accelerationY;
 
-   
     context.drawImage(
       octopus,
-      this.accelerationX || this.accelerationY ? 30 + 160 * Math.round(this.frame / 10) : 30 + 160 * 5,
-      this.accelerationX >= 0 ? 0 : 160,
+      this.accelerationX || this.accelerationY // if the player is moving (acceleration X and Y are truthy)
+        ? 30 + 160 * Math.round(this.frame / 10) // animated frames
+        : 30 + 160 * 4, // if not, fixed image 4
+      this.accelerationX >= 0 ? 0 : 160, // if the player is going to the right, the first row of the image full octo swim should be shown. Otherwise the second row (+160px)
       155, //width
       160, //height
       this.x - this.width / 5,
@@ -63,5 +79,3 @@ class Player {
     this.frame %= 50;
   }
 }
-
-// if player runs, make the image move. if not

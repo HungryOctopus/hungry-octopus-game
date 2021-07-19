@@ -27,8 +27,10 @@ class Game {
     }
     const ground = this.canvas.height - 130; // the octopus is on the ground
     this.running = true; // game doesn't run before the start
-    this.lastItemCreationTimestamp = 0; // to avoid the items to be to near to each other
-    this.itemCreationInterval = 3000; // 3 seconds between the creation of 2 items
+    this.lastItemCreationTimestamp = 0; // to avoid the items to be too near to each other
+    this.itemCreationInterval = 2000; // 3 seconds between the creation of 2 items
+    this.beginningTime = Date.now(); // time where the game has begun
+    //console.log(this.beginningTime);
     this.score = 100;
     this.enableControls();
     this.player = new Player(this, 100, ground);
@@ -60,7 +62,7 @@ class Game {
           this.player.accelerationX = +0.1;
           break;
         case ' ':
-          this.player.speedY -= 5;
+          this.player.speedY -= 1;
           break;
       }
     });
@@ -80,15 +82,15 @@ class Game {
   }
 
   addFood() {
-    const foodX = Math.random() * this.canvas.width; // position of the items is generated randomly
-    const foodY = Math.random() * this.canvas.height;
+    const foodX = this.canvas.width;
+    const foodY = Math.random() * this.canvas.height; // position of the items is generated randomly but comes from the right
     const food = new Food(this, foodX, foodY);
     this.foodArray.push(food);
   }
 
   addTrash() {
-    const trashX = Math.random() * this.canvas.width; // position of the items is generated randomly
-    const trashY = Math.random() * this.canvas.height;
+    const trashX = Math.random() * this.canvas.width; // position of the trash is generated randomly but comes from the top
+    const trashY = 0;
     const trash = new Trash(this, trashX, trashY, 40, 40);
     this.trashArray.push(trash);
   }
@@ -99,7 +101,7 @@ class Game {
     this.foodArray.forEach((item, index) => {
       if (item.checkIntersection(this.player)) {
         this.foodArray.splice(index, 1); // remove the item
-        this.score += 10;
+        this.score += 10; // this.itemScore is NOT WORKING WHY!!!
       }
     });
     this.trashArray.forEach((trash, index) => {
@@ -123,13 +125,28 @@ class Game {
 
   runLogic() {
     const currentTimestamp = Date.now();
-    if (
-      currentTimestamp - this.lastItemCreationTimestamp >
-      this.itemCreationInterval // if the last time we created an item is more than 3 seconds ago
-    ) {
-      this.addFood(); // then create an item
-      this.lastItemCreationTimestamp = currentTimestamp; // and set the last item creation timestamp to the current timestamp
+    // NOT WORKING
+    if (currentTimestamp - this.beginningTime > 30000) {
+      this.itemCreationInterval += 10; // increase progressively the item creation interval so there is less and less jellyfishes
+    } else {
+      if (
+        currentTimestamp - this.lastItemCreationTimestamp >
+        this.itemCreationInterval // if the last time we created an item is more than 3 seconds ago
+      ) {
+        this.addFood(); // then create an item
+        this.lastItemCreationTimestamp = currentTimestamp; // and set the last item creation timestamp to the current timestamp
+      }
     }
+
+    /* console.log(`beginning time: ${this.beginningTime}`);
+    console.log(`current time stamp: ${currentTimestamp}`);
+    console.log(
+      `currentTimestamp - beginning time: ${
+        currentTimestamp - this.beginningTime
+      }`
+    );
+    console.log(`this.itemCreationInterval: ${this.itemCreationInterval}`); */
+
     if (Math.random() < 0.01) {
       this.addTrash();
     }
@@ -175,8 +192,11 @@ class Game {
   }
 
   paintScore() {
-    this.context.font = '24px sans-serif';
-    this.context.fillText(`Score: ${this.score}`, 450, 50);
+    let scoreContainer = document.getElementById('score');
+    scoreContainer.innerHTML = `Score: ${game.score}`;
+
+    // let pointsJellyfishContainer = document.getElementById('pointsJellyfish');
+    //  pointsJellyfishContainer.innerHTML = `Jellyfish: ${this.items.itemScore}`; <-- what should be written there?
   }
 
   paint() {

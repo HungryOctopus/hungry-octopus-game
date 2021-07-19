@@ -5,7 +5,7 @@ const plasticbottle = new Image();
 plasticbottle.src = './images/plasticbottle.png';
 
 class Item {
-  constructor(game, x, y, width, height, speedX, speedY, image) {
+  constructor(game, x, y, width, height, speedX, speedY, image, itemScore) {
     this.game = game;
     this.x = x;
     this.y = y;
@@ -14,6 +14,7 @@ class Item {
     this.speedX = speedX;
     this.speedY = speedY;
     this.image = image;
+    this.itemScore = itemScore;
   }
 
   checkIntersection(player) {
@@ -57,7 +58,7 @@ class Item {
 
 class Food extends Item {
   constructor(game, x, y) {
-    super(game, x, y, 20, 20, -1, 1, jellyfish);
+    super(game, x, y, 20, 20, -1, 1, jellyfish, 10);
   }
 
   runLogic() {
@@ -70,6 +71,6 @@ class Food extends Item {
 
 class Trash extends Item {
   constructor(game, x, y) {
-    super(game, x, y, 20, 45, -1, 1, plasticbottle); 
+    super(game, x, y, 20, 45, -1, 1, plasticbottle, -20);
   }
 }
