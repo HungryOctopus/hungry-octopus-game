@@ -1,5 +1,8 @@
 const oceanBackground = new Image();
-oceanBackground.src = './images/ocean-background.png';
+oceanBackground.src = './images/ocean-parallax.png';
+let oceanBackgroundX = 0;
+let oceanBackground2X = 1920;
+let oceanBackgroundY = 0;
 
 class Game {
   constructor(canvas, screens) {
@@ -204,6 +207,7 @@ class Game {
     this.clearScreen(); //first clear the screen
     if (this.running) {
       this.paintBackground(); //then paint the background
+        this.horizontalScrolling();
       this.player.paint(); // paint the player
       this.foodArray.forEach((item) => {
         item.paint(); // paint each items
@@ -216,6 +220,63 @@ class Game {
   }
 
   paintBackground() {
-    this.context.drawImage(oceanBackground, 0, 0, 1000, 500);
+  this.paintFirstImage();
+   this.paintSecondImage();
+    if (this.running) {
+      // condition to the loop: if game over, it stops
+      window.requestAnimationFrame(() => {
+        this.paintBackground();
+      });
+    }
+  }
+
+  paintFirstImage() {
+    this.context.drawImage(
+      oceanBackground,
+      oceanBackgroundX,
+      oceanBackgroundY,
+      1920,
+      500
+    );
+  }
+
+  paintSecondImage() {
+    this.context.drawImage(
+      oceanBackground,
+      oceanBackground2X,
+      oceanBackgroundY,
+      1920,
+      500
+    );
+  }
+
+    horizontalScrolling() {
+ oceanBackgroundX -= 2;
+        oceanBackground2X -= 2; 
+
+       // console.log(oceanBackgroundX);
+        //console.log(oceanBackground2X)
+      
+    if (oceanBackgroundX === 0 - 1920) {
+      oceanBackgroundX = 1920;
+     // oceanBackground2X -= 10;
+       //this.running = false;
+      }
+      if (oceanBackground2X === 0 - 1920) {
+        //this.running = false;
+        
+        oceanBackground2X = 1920
+       // oceanBackground2X -= 10;
+        }
+
+
+
+
+   /* if (oceanBackgroundX < -oceanBackground.width) {
+      oceanBackgroundX = oceanBackground.width - 10;
+    }
+    if (oceanBackground2X < -oceanBackground.width) {
+      oceanBackground2X = oceanBackground.width - 10;
+    }  */
   }
 }

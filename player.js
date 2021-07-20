@@ -34,24 +34,22 @@ class Player {
     //const playerBottom = this.y - this.height / 2;
 
     const ground = this.game.canvas.height - 130; // 370
-    if (ground <= this.y) {
-      this.speedY = 0;
-      // this.accelerationY = 0.02;
+
+    if (this.y >= ground) {
+      this.y = ground;
     }
 
-    if (this.y >= 460 || this.y <= 30) {
-      this.speedY = 0;
-      this.accelerationY = 0;
-      resistance = -1; // does this do anything?
+    if (this.x <= 0) {
+      this.x = 0;
     }
 
-    if (this.x >= 950 || this.x <= 30) {
-      this.speedX = 0;
-      this.accelerationX = 0;
-      resistance = -1;
+    if (this.x >= this.game.canvas.width - this.width / 2) {
+      this.x = this.game.canvas.width - this.width / 2;
     }
 
-    // ground
+    if (this.y <= this.height / 2) {
+      this.y = this.height / 2;
+    }
   }
 
   paint() {
