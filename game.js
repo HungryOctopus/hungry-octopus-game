@@ -37,9 +37,11 @@ class Game {
     this.score = 100;
     this.enableControls();
     this.player = new Player(this, 100, ground);
-    this.foodArray = [];
+    this.jellyfishArray = [];
+    this.fishArray = [];
     this.trashArray = [];
-    this.addFood();
+    this.addJellyfish();
+    this.addFish();
     this.addTrash();
     this.loop();
     this.displayScreen('playing');
@@ -84,11 +86,18 @@ class Game {
     });
   }
 
-  addFood() {
-    const foodX = this.canvas.width;
-    const foodY = Math.random() * this.canvas.height; // position of the items is generated randomly but comes from the right
-    const food = new Food(this, foodX, foodY);
-    this.foodArray.push(food);
+  addJellyfish() {
+    const jellyfishX = this.canvas.width;
+    const jellyfishY = Math.random() * this.canvas.height; // position of the items is generated randomly but comes from the right
+    const jellyfish = new Jellyfish(this, jellyfishX, jellyfishY);
+    this.jellyfishArray.push(jellyfish);
+  }
+
+  addFish() {
+    const fishX = 30;
+    const fishY = Math.random() * this.canvas.height; // position of the fish is generated randomly but comes from the left
+    const fish = new Fish(this, fishX, fishY, 40, 40);
+    this.fishArray.push(fish);
   }
 
   addTrash() {
@@ -101,12 +110,19 @@ class Game {
   // collision detection
   checkCollisions() {
     const player = this.player;
-    this.foodArray.forEach((item, index) => {
+    this.jellyfishArray.forEach((item, index) => {
       if (item.checkIntersection(this.player)) {
-        this.foodArray.splice(index, 1); // remove the item
+        this.jellyfishArray.splice(index, 1); // remove the item
         this.score += 10; // this.itemScore is NOT WORKING WHY!!!
       }
     });
+    this.fishArray.forEach((item, index) => {
+      if (item.checkIntersection(this.player)) {
+        this.fishArray.splice(index, 1); // remove the item
+        this.score += 30; // this.itemScore is NOT WORKING WHY!!!
+      }
+    });
+
     this.trashArray.forEach((trash, index) => {
       if (trash.checkIntersection(this.player)) {
         this.trashArray.splice(index, 1); // remove the trash
@@ -136,7 +152,7 @@ class Game {
         currentTimestamp - this.lastItemCreationTimestamp >
         this.itemCreationInterval // if the last time we created an item is more than 3 seconds ago
       ) {
-        this.addFood(); // then create an item
+        this.addJellyfish(); // then create an item
         this.lastItemCreationTimestamp = currentTimestamp; // and set the last item creation timestamp to the current timestamp
       }
     }
@@ -149,6 +165,9 @@ class Game {
       }`
     );
     console.log(`this.itemCreationInterval: ${this.itemCreationInterval}`); */
+    if (Math.random() < 0.001) {
+      this.addFish();
+    }
 
     if (Math.random() < 0.01) {
       this.addTrash();
@@ -156,7 +175,10 @@ class Game {
     // execute runLogic method for all elements bound to the game objet: player and items
     this.player.runLogic();
     this.checkCollisions(); //collision detection
-    this.foodArray.forEach((item) => {
+    this.jellyfishArray.forEach((item) => {
+      item.runLogic();
+    });
+    this.fishArray.forEach((item) => {
       item.runLogic();
     });
     this.trashArray.forEach((trash) => {
@@ -178,9 +200,14 @@ class Game {
   collectGarbage() {
     // for the items that are not visible anymore on screen
     const ground = this.canvas.height - 130; // const ground so the items are destroyed as soon as they touch the ground
-    this.foodArray.forEach((item, index) => {
+    this.jellyfishArray.forEach((item, index) => {
       if (item.x < 0 || item.y > ground) {
-        this.foodArray.splice(index, 1); //mutates the array. 1 -> the number of elements
+        this.jellyfishArray.splice(index, 1); //mutates the array. 1 -> the number of elements
+      }
+    });
+    this.fishArray.forEach((item, index) => {
+      if (item.x < 0 || item.y > ground) {
+        this.fishArray.splice(index, 1); //mutates the array. 1 -> the number of elements
       }
     });
     this.trashArray.forEach((trash, index) => {
@@ -207,9 +234,12 @@ class Game {
     this.clearScreen(); //first clear the screen
     if (this.running) {
       this.paintBackground(); //then paint the background
-        this.horizontalScrolling();
+      this.horizontalScrolling();
       this.player.paint(); // paint the player
-      this.foodArray.forEach((item) => {
+      this.jellyfishArray.forEach((item) => {
+        item.paint(); // paint each items
+      });
+      this.fishArray.forEach((item) => {
         item.paint(); // paint each items
       });
       this.trashArray.forEach((trash) => {
@@ -220,8 +250,8 @@ class Game {
   }
 
   paintBackground() {
-  this.paintFirstImage();
-   this.paintSecondImage();
+    this.paintFirstImage();
+    this.paintSecondImage();
     if (this.running) {
       // condition to the loop: if game over, it stops
       window.requestAnimationFrame(() => {
@@ -250,33 +280,23 @@ class Game {
     );
   }
 
-    horizontalScrolling() {
- oceanBackgroundX -= 2;
-        oceanBackground2X -= 2; 
+  horizontalScrolling() {
+    oceanBackgroundX -= 2;
+    oceanBackground2X -= 2;
 
-       // console.log(oceanBackgroundX);
-        //console.log(oceanBackground2X)
-      
+    // console.log(oceanBackgroundX);
+    //console.log(oceanBackground2X)
+
     if (oceanBackgroundX === 0 - 1920) {
       oceanBackgroundX = 1920;
-     // oceanBackground2X -= 10;
-       //this.running = false;
-      }
-      if (oceanBackground2X === 0 - 1920) {
-        //this.running = false;
-        
-        oceanBackground2X = 1920
-       // oceanBackground2X -= 10;
-        }
-
-
-
-
-   /* if (oceanBackgroundX < -oceanBackground.width) {
-      oceanBackgroundX = oceanBackground.width - 10;
+      // oceanBackground2X -= 10;
+      //this.running = false;
     }
-    if (oceanBackground2X < -oceanBackground.width) {
-      oceanBackground2X = oceanBackground.width - 10;
-    }  */
+    if (oceanBackground2X === 0 - 1920) {
+      //this.running = false;
+
+      oceanBackground2X = 1920;
+      // oceanBackground2X -= 10;
+    }
   }
 }

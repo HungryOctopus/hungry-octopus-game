@@ -74,6 +74,6 @@ class Player {
     );
     context.restore();
     this.frame++;
-    this.frame %= 50;
+    this.frame %= 50; 
   }
 }

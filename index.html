@@ -13,7 +13,7 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
-    <div class="screen" id="screen-start">
+    <div class="screen" id="screen-start" width="100%">
       <span class="octopus-logo">
         <img
           src="./images/octoplayer-alone.png"
@@ -31,29 +31,46 @@
         <div id="score">
           <!-- placed in game.js-->
         </div>
-        <div id="instructions">
-          <p>
-            Move the octopus with the keyboard and make it jump with the space
-            bar. Collect the food and avoid the garbage
-          </p>
-        </div>
 
-        <div id="info-food">
-          <li>Points for food:</li>
-          <ul>
-            <li id="pointsJellyfish">Jellyfish</li>
-            <li id="pointsCrab">Crab</li>
-          </ul>
-        </div>
-        <div id="info-garbage">
-          <li>Minus points for garbage:</li>
-          <ul>
-            <li>Plastic bottle:</li>
-            <li>FFP2 Mask:</li>
-            <li>Atomic waiste:</li>
-          </ul>
+        <div id="game-info">
+          <div id="info-food">
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="2">Fetch the food</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <img src="images/jellyfish.png" width="20px" />
+                  </td>
+                  <td>10 points</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="info-garbage">
+            <table>
+              <thead>
+                <tr>
+                  <th colspan="2">Avoid the plastic trash</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <img src="images/plasticbottle.png" height="30px" />
+                  </td>
+                  <td>-20 points</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+
       <div id="canvas-div">
         <canvas width="1000" height="500"></canvas>
       </div>

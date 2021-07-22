@@ -4,6 +4,9 @@ jellyfish.src = './images/jellyfish.png';
 const plasticbottle = new Image();
 plasticbottle.src = './images/plasticbottle.png';
 
+const fish = new Image();
+fish.src = './images/fish.png';
+
 class Item {
   constructor(game, x, y, width, height, speedX, speedY, image, itemScore) {
     this.game = game;
@@ -31,9 +34,6 @@ class Item {
   }
 
   runLogic() {
-    //responsible for the logic movements of the items
-    // Math.cos, Math.sin, Math.tan
-    // const speedX = this.game.current;
     this.x += this.speedX;
     this.y += this.speedY;
   }
@@ -42,8 +42,6 @@ class Item {
     //responsible for painting the items on the screen
     const context = this.game.context;
     context.save();
-
-    // this.game.context.fillRect(this.x, this.y, 25, 25); // items are squares for now, later to be replaced with images
 
     context.drawImage(
       this.image,
@@ -56,7 +54,7 @@ class Item {
   }
 }
 
-class Food extends Item {
+class Jellyfish extends Item {
   constructor(game, x, y) {
     super(game, x, y, 20, 20, -1, 1, jellyfish, 10);
   }
@@ -66,6 +64,17 @@ class Food extends Item {
     if (Math.random() < (this.speedY > 0 ? 0.05 : 0.05)) {
       this.speedY *= -1;
     }
+  }
+}
+
+class Fish extends Item {
+  constructor(game, x, y) {
+    super(game, x, y, 30, 30, -1, 1, fish, 30);
+  }
+
+  runLogic() {
+    this.x -= this.speedX;
+    // this.y += this.speedY;
   }
 }
 
