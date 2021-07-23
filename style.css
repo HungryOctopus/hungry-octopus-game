@@ -1,11 +1,10 @@
 body {
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   background-image: url(./images/ocean-firstpage.png);
   background-size: cover;
   background-repeat: no-repeat;
   display: flex;
   flex-direction: column;
+  align-content: space-between;
   background-color: rgb(13, 42, 138);
   color: darkslategray;
   font-family: Lato, sans-serif;
@@ -13,6 +12,7 @@ body {
   font-weight: 400;
   line-height: 1.7;
   margin: 0;
+  margin-bottom: 100px;
   align-items: center;
 }
 
@@ -35,10 +35,10 @@ h3 {
 button {
   border-radius: 8px;
   border: 0.5;
-  border-color: lightgray;
+  border-color: gray;
+  font-weight: bold;
   color: darkslategray;
   cursor: pointer;
-  /* display: inline-block; */
   height: 2.75em;
   background-color: inherit;
   min-width: 100px;
@@ -52,7 +52,7 @@ button {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 10px;
+  padding: 5px;
   justify-content: space-between;
   max-width: 1000px;
 }
@@ -60,6 +60,7 @@ button {
 #score {
   font-size: 36px;
   align-items: left;
+  padding: 30px;
 }
 
 #game-info {
@@ -100,4 +101,29 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+/* Footer: credits & follow me */
+
+footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 30px;
+  color: #292c2f;
+  min-width: 500px;
+}
+
+footer a {
+  color: #292c2f;
+  text-decoration: none;
+  font-size: x-small;
+  font-weight: bold;
+}
+
+footer a:hover,
+footer a:focus {
+  color: #292c2f;
+  text-decoration: none;
 }

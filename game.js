@@ -4,6 +4,10 @@ let oceanBackgroundX = 0;
 let oceanBackground2X = 1920;
 let oceanBackgroundY = 0;
 
+let bubblesAudio = new Audio('./sound/bubbles.mp3');
+let eatingAudio = new Audio('./sound/eating.mp3');
+let screamAudio = new Audio('./sound/scream.mp3');
+
 class Game {
   constructor(canvas, screens) {
     this.canvas = canvas;
@@ -31,7 +35,7 @@ class Game {
     const ground = this.canvas.height - 130; // the octopus is on the ground
     this.running = true; // game doesn't run before the start
     this.lastItemCreationTimestamp = 0; // to avoid the items to be too near to each other
-    this.itemCreationInterval = 2000; // 3 seconds between the creation of 2 items
+    this.itemCreationInterval = 2000; // 2 seconds between the creation of 2 items
     this.beginningTime = Date.now(); // time where the game has begun
     //console.log(this.beginningTime);
     this.score = 100;
@@ -40,13 +44,8 @@ class Game {
     this.jellyfishArray = [];
     this.fishArray = [];
     this.trashArray = [];
-    this.addJellyfish();
-    this.addFish();
-    this.addTrash();
     this.loop();
     this.displayScreen('playing');
-
-    //    this.current = (3 * Math.PI) / 4; // 135deg
   }
 
   enableControls() {
@@ -55,18 +54,23 @@ class Game {
       const key = event.key;
       switch (key) {
         case 'ArrowUp':
+          event.preventDefault(); // to prevent the browser to scroll
           this.player.accelerationY = -0.1;
           break;
         case 'ArrowDown':
+          event.preventDefault();
           this.player.accelerationY = +0.1;
           break;
         case 'ArrowLeft':
+          event.preventDefault();
           this.player.accelerationX = -0.1;
           break;
         case 'ArrowRight':
+          event.preventDefault();
           this.player.accelerationX = +0.1;
           break;
         case ' ':
+          event.preventDefault();
           this.player.speedY -= 1;
           break;
       }
@@ -114,12 +118,14 @@ class Game {
       if (item.checkIntersection(this.player)) {
         this.jellyfishArray.splice(index, 1); // remove the item
         this.score += 10; // this.itemScore is NOT WORKING WHY!!!
+        bubblesAudio.play();
       }
     });
     this.fishArray.forEach((item, index) => {
       if (item.checkIntersection(this.player)) {
         this.fishArray.splice(index, 1); // remove the item
         this.score += 30; // this.itemScore is NOT WORKING WHY!!!
+        eatingAudio.play();
       }
     });
 
@@ -127,6 +133,7 @@ class Game {
       if (trash.checkIntersection(this.player)) {
         this.trashArray.splice(index, 1); // remove the trash
         this.score -= 20;
+        screamAudio.play();
       }
     });
   }
@@ -143,28 +150,24 @@ class Game {
   }
 
   runLogic() {
-    const currentTimestamp = Date.now();
+    /*     
     // NOT WORKING
+
     if (currentTimestamp - this.beginningTime > 30000) {
-      this.itemCreationInterval += 10; // increase progressively the item creation interval so there is less and less jellyfishes
+      // this.itemCreationInterval += 10; // increase progressively the item creation interval so there is less and less jellyfishes
     } else {
-      if (
-        currentTimestamp - this.lastItemCreationTimestamp >
-        this.itemCreationInterval // if the last time we created an item is more than 3 seconds ago
-      ) {
-        this.addJellyfish(); // then create an item
-        this.lastItemCreationTimestamp = currentTimestamp; // and set the last item creation timestamp to the current timestamp
-      }
+      */
+    const currentTimestamp = Date.now();
+    if (
+      currentTimestamp - this.lastItemCreationTimestamp >
+      this.itemCreationInterval // if the last time we created an item is more than 3 seconds ago
+    ) {
+      this.addJellyfish(); // then create an item
+      this.lastItemCreationTimestamp = currentTimestamp; // and set the last item creation timestamp to the current timestamp
+      this.itemCreationInterval++;
+      console.log(this.itemCreationInterval);
     }
 
-    /* console.log(`beginning time: ${this.beginningTime}`);
-    console.log(`current time stamp: ${currentTimestamp}`);
-    console.log(
-      `currentTimestamp - beginning time: ${
-        currentTimestamp - this.beginningTime
-      }`
-    );
-    console.log(`this.itemCreationInterval: ${this.itemCreationInterval}`); */
     if (Math.random() < 0.001) {
       this.addFish();
     }
@@ -172,7 +175,7 @@ class Game {
     if (Math.random() < 0.01) {
       this.addTrash();
     }
-    // execute runLogic method for all elements bound to the game objet: player and items
+    //  execute runLogic method for all elements bound to the game objet: player and items
     this.player.runLogic();
     this.checkCollisions(); //collision detection
     this.jellyfishArray.forEach((item) => {
@@ -201,17 +204,32 @@ class Game {
     // for the items that are not visible anymore on screen
     const ground = this.canvas.height - 130; // const ground so the items are destroyed as soon as they touch the ground
     this.jellyfishArray.forEach((item, index) => {
-      if (item.x < 0 || item.y > ground) {
+      if (
+        item.x < 0 ||
+        item.x > this.canvas.width ||
+        item.y > ground ||
+        item.y < 0
+      ) {
         this.jellyfishArray.splice(index, 1); //mutates the array. 1 -> the number of elements
       }
     });
     this.fishArray.forEach((item, index) => {
-      if (item.x < 0 || item.y > ground) {
+      if (
+        item.x < 0 ||
+        item.x > this.canvas.width ||
+        item.y > ground ||
+        item.y < 0
+      ) {
         this.fishArray.splice(index, 1); //mutates the array. 1 -> the number of elements
       }
     });
-    this.trashArray.forEach((trash, index) => {
-      if (trash.x < 0 || trash.y > ground) {
+    this.trashArray.forEach((item, index) => {
+      if (
+        item.x < 0 ||
+        item.x > this.canvas.width ||
+        item.y > ground ||
+        item.y < 0
+      ) {
         this.trashArray.splice(index, 1); //mutates the array. 1 -> the number of elements
       }
     });
@@ -252,12 +270,12 @@ class Game {
   paintBackground() {
     this.paintFirstImage();
     this.paintSecondImage();
-    if (this.running) {
-      // condition to the loop: if game over, it stops
-      window.requestAnimationFrame(() => {
-        this.paintBackground();
-      });
-    }
+    // if (this.running) {
+    //   // condition to the loop: if game over, it stops
+    //   window.requestAnimationFrame(() => {
+    //     this.paintBackground();
+    //   });
+    // }
   }
 
   paintFirstImage() {
@@ -281,11 +299,8 @@ class Game {
   }
 
   horizontalScrolling() {
-    oceanBackgroundX -= 2;
-    oceanBackground2X -= 2;
-
-    // console.log(oceanBackgroundX);
-    //console.log(oceanBackground2X)
+    oceanBackgroundX -= 1.5;
+    oceanBackground2X -= 1.5;
 
     if (oceanBackgroundX === 0 - 1920) {
       oceanBackgroundX = 1920;
