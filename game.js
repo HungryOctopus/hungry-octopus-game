@@ -15,7 +15,7 @@ class Game {
     this.running = false; // to set the game over function
     this.enableControls();
     this.screens = screens;
-    //this.loop();
+    this.background = new Background(this);
   }
 
   displayScreen(name) {
@@ -37,7 +37,6 @@ class Game {
     this.lastItemCreationTimestamp = 0; // to avoid the items to be too near to each other
     this.itemCreationInterval = 2000; // 2 seconds between the creation of 2 items
     this.beginningTime = Date.now(); // time where the game has begun
-    //console.log(this.beginningTime);
     this.score = 100;
     this.enableControls();
     this.player = new Player(this, 100, ground);
@@ -150,13 +149,6 @@ class Game {
   }
 
   runLogic() {
-    /*     
-    // NOT WORKING
-
-    if (currentTimestamp - this.beginningTime > 30000) {
-      // this.itemCreationInterval += 10; // increase progressively the item creation interval so there is less and less jellyfishes
-    } else {
-      */
     const currentTimestamp = Date.now();
     if (
       currentTimestamp - this.lastItemCreationTimestamp >
@@ -165,7 +157,6 @@ class Game {
       this.addJellyfish(); // then create an item
       this.lastItemCreationTimestamp = currentTimestamp; // and set the last item creation timestamp to the current timestamp
       this.itemCreationInterval++;
-      console.log(this.itemCreationInterval);
     }
 
     if (Math.random() < 0.001) {
@@ -187,6 +178,7 @@ class Game {
     this.trashArray.forEach((trash) => {
       trash.runLogic();
     }); // run the logic for every item in the array items
+    this.background.runLogic();
 
     this.collectGarbage(); // makes the items disappear that we don't use anymore for performance reasons
     if (this.score <= 0) {
@@ -251,8 +243,9 @@ class Game {
     // executes paint method for all elements bound to the game object
     this.clearScreen(); //first clear the screen
     if (this.running) {
-      this.paintBackground(); //then paint the background
-      this.horizontalScrolling();
+      this.background.paint();
+      // this.paintBackground(); //then paint the background
+      // this.horizontalScrolling();
       this.player.paint(); // paint the player
       this.jellyfishArray.forEach((item) => {
         item.paint(); // paint each items
@@ -267,20 +260,18 @@ class Game {
     }
   }
 
-  paintBackground() {
+  /*   
+
+ancient method for infinite loop
+
+paintBackground() {
     this.paintFirstImage();
     this.paintSecondImage();
-    // if (this.running) {
-    //   // condition to the loop: if game over, it stops
-    //   window.requestAnimationFrame(() => {
-    //     this.paintBackground();
-    //   });
-    // }
   }
 
   paintFirstImage() {
     this.context.drawImage(
-      oceanBackground,
+      this.background,
       oceanBackgroundX,
       oceanBackgroundY,
       1920,
@@ -290,7 +281,7 @@ class Game {
 
   paintSecondImage() {
     this.context.drawImage(
-      oceanBackground,
+      this.background,
       oceanBackground2X,
       oceanBackgroundY,
       1920,
@@ -313,5 +304,5 @@ class Game {
       oceanBackground2X = 1920;
       // oceanBackground2X -= 10;
     }
-  }
+  } */
 }
