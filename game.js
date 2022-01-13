@@ -116,14 +116,14 @@ class Game {
     this.jellyfishArray.forEach((item, index) => {
       if (item.checkIntersection(this.player)) {
         this.jellyfishArray.splice(index, 1); // remove the item
-        this.score += 10; // this.itemScore is NOT WORKING WHY!!!
+        this.score += 10;
         bubblesAudio.play();
       }
     });
     this.fishArray.forEach((item, index) => {
       if (item.checkIntersection(this.player)) {
         this.fishArray.splice(index, 1); // remove the item
-        this.score += 30; // this.itemScore is NOT WORKING WHY!!!
+        this.score += 30; 
         eatingAudio.play();
       }
     });
@@ -259,50 +259,4 @@ class Game {
       this.paintScore();
     }
   }
-
-  /*   
-
-ancient method for infinite loop
-
-paintBackground() {
-    this.paintFirstImage();
-    this.paintSecondImage();
-  }
-
-  paintFirstImage() {
-    this.context.drawImage(
-      this.background,
-      oceanBackgroundX,
-      oceanBackgroundY,
-      1920,
-      500
-    );
-  }
-
-  paintSecondImage() {
-    this.context.drawImage(
-      this.background,
-      oceanBackground2X,
-      oceanBackgroundY,
-      1920,
-      500
-    );
-  }
-
-  horizontalScrolling() {
-    oceanBackgroundX -= 1.5;
-    oceanBackground2X -= 1.5;
-
-    if (oceanBackgroundX === 0 - 1920) {
-      oceanBackgroundX = 1920;
-      // oceanBackground2X -= 10;
-      //this.running = false;
-    }
-    if (oceanBackground2X === 0 - 1920) {
-      //this.running = false;
-
-      oceanBackground2X = 1920;
-      // oceanBackground2X -= 10;
-    }
-  } */
 }

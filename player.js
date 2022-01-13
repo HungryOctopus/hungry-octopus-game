@@ -27,12 +27,6 @@ class Player {
     this.x += this.speedX;
     this.y += this.speedY;
 
-    // hard limits: end of the canvas
-
-    //const playerTop = this.y + this.height / 2;
-    //const canvasHeight = this.game.canvas.height; // 500
-    //const playerBottom = this.y - this.height / 2;
-
     const ground = this.game.canvas.height - 130; // 370
 
     if (this.y >= ground) {
@@ -64,7 +58,9 @@ class Player {
       this.accelerationX || this.accelerationY // if the player is moving (acceleration X and Y are truthy)
         ? 30 + 160 * Math.round(this.frame / 10) // animated frames
         : 30 + 160 * 4, // if not, fixed image 4
-      this.accelerationX >= 0 ? 0 : 160, // if the player is going to the right, the first row of the image full octo swim should be shown. Otherwise the second row (+160px)
+      this.accelerationX >= 0 ? 0 : 160, // if the player is going to the right, 
+      // the first row of the image full octo swim should be shown. 
+      // Otherwise the second row (+160px)
       155, //width
       160, //height
       this.x - this.width / 5,

@@ -31,9 +31,6 @@ class Background {
     const distance = this.game.player.x + this.x;
 
     for (let i = 0; i < backgroundLayers.length; i++) {
-      // if (this.player.x) {
-
-      // }
       const layer = backgroundLayers[i];
       const outset = ((distance * i) / 6) % width;
       context.drawImage(layer, -outset, 0, width, height);
