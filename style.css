@@ -103,6 +103,11 @@ button {
   align-items: center;
 }
 
+#link {
+  color: darkslategray;
+  font-weight: 700;
+}
+
 /* Footer: credits & follow me */
 
 footer {
