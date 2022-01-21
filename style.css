@@ -112,12 +112,27 @@ button {
 
 footer {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding-top: 30px;
   color: #292c2f;
   min-width: 500px;
+}
+
+footer ul {
+  display: flex;
+  flex-direction: row;
+  list-style-type: none;
+}
+
+footer div {
+  display: flex;
+  align-items: center;
+}
+
+footer li {
+  padding-left: 10px;
 }
 
 footer a {

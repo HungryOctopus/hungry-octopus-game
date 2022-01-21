@@ -6,17 +6,25 @@
     <title>Hungry Octopus game</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link rel="icon" href="./images/favicon.ico" />
-     
-      <!-- ### Open graph meta tags ### -->
-      <meta name="title" property="og:title" content="Hungry Octopus Game" />
-      <meta name="description" content="A game developed with JavaScript and canvas. Feed the octopus and avoid the trash to get points." />
-      <meta property="og:type" content="website" />
-      <meta name="image" property="og:image" content="https://res.cloudinary.com/db5ijkzpx/image/upload/v1638220846/hungry-octopus_zctpmr.png" />
-      <meta name="description" property="og:description" content="A game developed with JavaScript and canvas. Feed the octopus and avoid the trash to get points. :octopus:" />
-      <meta name="author" content="Amélie Monnoyer" />
-    
-   
 
+    <!-- ### Open graph meta tags ### -->
+    <meta name="title" property="og:title" content="Hungry Octopus Game" />
+    <meta
+      name="description"
+      content="A game developed with JavaScript and canvas. Feed the octopus and avoid the trash to get points."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      name="image"
+      property="og:image"
+      content="https://res.cloudinary.com/db5ijkzpx/image/upload/v1638220846/hungry-octopus_zctpmr.png"
+    />
+    <meta
+      name="description"
+      property="og:description"
+      content="A game developed with JavaScript and canvas. Feed the octopus and avoid the trash to get points. :octopus:"
+    />
+    <meta name="author" content="Amélie Monnoyer" />
   </head>
   <body>
     <div class="screen" id="screen-start" width="100%">
@@ -91,29 +99,83 @@
     <div class="screen" id="screen-game-over" style="display: none">
       <h3>You lost the game :(</h3>
       <button>Try Again</button>
-      <p>Liked the game? Please consider to 
-        <a href='https://donate.bloomassociation.org/BLOOMdefault/1~my-donation?context_form_id=form_5815dd2fa9442faa9a4b5105c09133c1_61ea74c5f3aff0.32247162' class="donate-link" target="_blank">donate</a> for ocean protection.</p>
+      <p>
+        Liked the game? Please consider
+        <a
+          href="https://donate.bloomassociation.org/BLOOMdefault/1~my-donation?context_form_id=form_5815dd2fa9442faa9a4b5105c09133c1_61ea74c5f3aff0.32247162"
+          class="donate-link"
+          target="_blank"
+          >donating</a
+        >
+        for ocean protection.
+      </p>
     </div>
 
     <footer>
-          <div>Credits:  </div>
-          <div><a href = "https://craftpix.net/freebies/free-underwater-world-parallax-game-backgrounds/" target="_blank"> Background </a></div>
-          <div><a href = "https://opengameart.org/content/octopus-swim" target="_blank"> Octopus </a></div>
-          <div><a href = "https://opengameart.org/content/fish-set" target="_blank"> Octopus food </a></div>
-          <div><a href = "https://opengameart.org/content/recycle-items-set" target="_blank"> Plastic trash </a></div>
-          <div><a href = "https://opengameart.org/content/skippy-fish-water-sound-collection" target="_blank"> Sounds </a></div>
-    </br> </br>
-      
- 
-  
-  <div>  Follow me  </div>
-          <div><a href="https://www.linkedin.com/in/am%C3%A9lie-monnoyer/" target="_blank">
-            <i class="fab fa-linkedin"></i>
-           <div><a href = "https://github.com/HungryOctopus" target="_blank">
-          <img src="images/GitHub.png" width="30px"></a></div>
-          </footer>
+      <div>
+        <ul>
+          <li>Credits:</li>
+          <li>
+            <a
+              href="https://craftpix.net/freebies/free-underwater-world-parallax-game-backgrounds/"
+              target="_blank"
+            >
+              Background
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://opengameart.org/content/octopus-swim"
+              target="_blank"
+            >
+              Octopus
+            </a>
+          </li>
+          <li>
+            <a href="https://opengameart.org/content/fish-set" target="_blank">
+              Octopus food
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://opengameart.org/content/recycle-items-set"
+              target="_blank"
+            >
+              Plastic trash
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://opengameart.org/content/skippy-fish-water-sound-collection"
+              target="_blank"
+            >
+              Sounds
+            </a>
+          </li>
+        </ul>
+      </div>
 
-  
+      <div>
+       
+          <div>Follow me</div>
+          <ul>
+          <li>
+            <a
+              href="https://www.linkedin.com/in/am%C3%A9lie-monnoyer/"
+              target="_blank"
+            >
+              <img src="images/LI-In-Bug.png" height="30px"
+            /></a>
+          </li>
+          <li>
+            <a href="https://github.com/HungryOctopus" target="_blank">
+              <img src="images/GitHub.png" height="30px"
+            /></a>
+          </li>
+        </ul>
+       
+    </footer>
+
     <!-- import the splitted js logic. From the less important to the most important. -->
     <script src="items.js"></script>
     <script src="player.js"></script>
