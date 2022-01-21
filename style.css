@@ -103,7 +103,7 @@ button {
   align-items: center;
 }
 
-#link {
+.donate-link {
   color: darkslategray;
   font-weight: 700;
 }
